@@ -1,38 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Barangay {{ $barangay['name'] }} Details</title>
-</head>
-<body>
-    <a href="{{ route('barangay.index') }}">Back to Barangay List</a>
+@extends('layouts.app')
 
-    <h1>Barangay {{ $barangay['name'] }} Details</h1>
-    <p>Prepared by: Justine Andrei A. Tacorda</p>
+@section('title', 'Barangay ' . $barangay['name'])
 
-    <table border="1" cellpadding="8">
-        <tr>
-            <th>ID</th>
-            <td>{{ $barangay['id'] }}</td>
-        </tr>
-        <tr>
-            <th>Name</th>
-            <td>{{ $barangay['name'] }}</td>
-        </tr>
-        <tr>
-            <th>Municipality</th>
-            <td>{{ $barangay['municipality'] }}</td>
-        </tr>
-        <tr>
-            <th>Population</th>
-            <td>{{ $barangay['population'] }}</td>
-        </tr>
-        <tr>
-            <th>Barangay Captain</th>
-            <td>{{ $barangay['barangay_captain'] }}</td>
-        </tr>
-    </table>
-    
-</body>
-</html>
+@section('content')
+    <h2>Barangay {{ $barangay['name'] }} Details</h2>
+
+    <div class="card" style="max-width: 500px;">
+        <div class="card-body">
+            <table class="table table-bordered mb-0">
+                <tr>
+                    <th>ID</th>
+                    <td>{{ $barangay['id'] }}</td>
+                </tr>
+                <tr>
+                    <th>Name</th>
+                    <td>{{ $barangay['name'] }}</td>
+                </tr>
+                <tr>
+                    <th>Municipality</th>
+                    <td>{{ $barangay['municipality'] }}</td>
+                </tr>
+                <tr>
+                    <th>Population</th>
+                    <td>{{ $barangay['population'] }}</td>
+                </tr>
+                <tr>
+                    <th>Barangay Captain</th>
+                    <td>{{ $barangay['barangay_captain'] }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <a href="{{ route('barangay.index') }}" class="btn btn-secondary mt-3">Back to List</a>
+@endsection
