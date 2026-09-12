@@ -1,43 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Filter Municipality</title>
-</head>
-<body>
-    <a href="{{ route('barangay.index') }}">Back to Barangay List</a>
-    <h1>Filter Municipality</h1>
-    <p>Prepared by: Justine Andrei A. Tacorda</p>
+@extends('layouts.app')
+
+@section('title', 'Filter by Municipality')
+
+@section('content')
+    <h2>Filter by Municipality</h2>
 
     @if ($municipality)
-        <p>Showing Municipality in: <strong>{{ $municipality }}</strong></p>
+        <p>Showing barangays in: <strong>{{ $municipality }}</strong></p>
     @else
-        <p>Showing all Municipality.</p>
+        <p>Showing all municipalities.</p>
     @endif
 
-    <table border="1" cellpadding="8">
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Municipality</th>
-            <th>Population</th>
-            <th>Barangay Captain</th>
-        </tr>
-
-        @forelse ($barangays as $barangay)
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
             <tr>
-                <td>{{ $barangay['id'] }}</td>
-                <td>{{ $barangay['name'] }}</td>
-                <td>{{ $barangay['municipality'] }}</td>
-                <td>{{ $barangay['population'] }}</td>
-                <td>{{ $barangay['barangay_captain'] }}</td>
+                <th>#</th>
+                <th>Name</th>
+                <th>Municipality</th>
+                <th>Population</th>
+                <th>Barangay Captain</th>
             </tr>
-        @empty
-            <tr>
-                <td colspan="5">No Municipality found for "{{ $municipality }}".</td>
-            </tr>
-        @endforelse
+        </thead>
+        <tbody>
+            @forelse ($barangays as $barangay)
+                <tr>
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $barangay['name'] }}</td>
+                    <td>{{ $barangay['municipality'] }}</td>
+                    <td>{{ $barangay['population'] }}</td>
+                    <td>{{ $barangay['barangay_captain'] }}</td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="5" class="text-center">
+                        No barangays found for "{{ $municipality }}".
+                    </td>
+                </tr>
+            @endforelse
+        </tbody>
     </table>
-</body>
-</html>
+
+    <a href="{{ route('barangay.index') }}" class="btn btn-secondary mt-2">Back to List</a>
+@endsection
