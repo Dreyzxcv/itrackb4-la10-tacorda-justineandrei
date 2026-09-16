@@ -1,19 +1,24 @@
 <?php
+
 use App\Http\Controllers\BarangayController;
+use App\Http\Controllers\TeacherController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/barangay', [BarangayController::class, 'index'])
-    ->name('barangay.index');
-
 Route::get('/barangay/featured', [BarangayController::class, 'featured'])
     ->name('barangay.featured');
 
-Route::get('barangay/filter/{municipality?}', [BarangayController::class, 'filter'])
+Route::get('/barangay/filter/{municipality?}', [BarangayController::class, 'filter'])
     ->name('barangay.filter');
 
-Route::get('/barangay/{id}', [BarangayController::class, 'show'])
-    ->name('barangay.show');
+Route::resource('barangay', BarangayController::class)
+    ->only(['index', 'show']);
+
+Route::get('/teachers/featured', [TeacherController::class, 'featured'])
+    ->name('teachers.featured');
+
+Route::resource('teachers', TeacherController::class)
+    ->only(['index', 'show']);
