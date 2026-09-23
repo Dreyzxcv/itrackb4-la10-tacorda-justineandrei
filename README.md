@@ -1,8 +1,17 @@
-**Q1: Explain the order you placed your featured route and your detail route in, and what would happen if you swapped them.**
-- I put the featured route before the {id} route because Laravel checks routes from top to bottom and stops at the first one that matches. If I put {id} first, Laravel would see "featured" in the URL and think it's an id, so it would never reach the featured route at all. By putting featured first, Laravel finds it before even looking at the {id} route.
+# Laboratory Activity 6
 
-**Q2: What happens when someone visits an id that does not exist in your data, and what did you write to make that happen?**
-- If someone types an id that doesn't exist like /barangay/999, they'll see a clean 404 page. I used isset() to check first if that id exists in my array, and if it doesn't, I call abort(404) which stops everything and shows the not found page. Without that check, it would just crash and show a PHP error with my file paths on screen.
+## Q1 — Why no new route was needed
 
-**Q3: Why do your links use route names instead of typed URLs? Give one concrete thing that would break if they did not.**
-- I used route names so that if I ever change the URL in my routes file, all the links in my views automatically update too. For example if I changed /barangay to /barangays, the back link in my detail page would break if I typed the URL directly. But since I used route('barangay.index'), it just works without touching the views.
+The router only looks at the path, not the query string. So whether I visit `/barangay`, `/barangay?municipality=Virac`, or `/barangay?municipality=Virac&captain=Justine Andrei Tacorda`, they all hit the same route. I just read the filter values inside the controller using `$request->query()`, so I never needed to add a new route.
+
+## Q2 — What the URL would look like with route parameters
+
+If I used route parameters for both filters, the URL for "year 4 only, no course filter" would have to look something like `/barangay/all/4` — I would need to put a placeholder like `all` just to say I'm not filtering by municipality. You can't skip a route parameter, so you're forced to include something even when you don't need that filter. That's why I used query strings instead — I only include the ones I'm actually using.
+
+## Q3 — Which one needed a change to the pattern
+
+The detail page (D3) needed a change. I used `request()->is('barangay*')` with a wildcard so it stays marked even when I'm on `/barangay/1`. The filter case (D4) didn't need anything because the query string isn't part of the path — so `barangay*` already matches `/barangay?municipality=Virac` without me doing anything extra.
+
+## Q4 — Why I deleted filter() but kept store() and update()
+
+I deleted `filter()` because I already replaced it with a better version inside `index()`. Keeping it would mean I have two filter implementations in the same project, and one of them is dead. I kept `store()` and `update()` because those are still empty — they're not replaced, they're just not finished yet. They'll be filled in during the next weeks, so leaving them there makes sense.
