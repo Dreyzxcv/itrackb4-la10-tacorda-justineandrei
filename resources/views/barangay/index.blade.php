@@ -3,7 +3,34 @@
 @section('title', 'All Barangays List')
 
 @section('content')
-     <h2>List of Barangays</h2>
+    <h2>List of Barangays</h2>
+
+    @if ($municipality === 'all' && $captain === 'all')
+        <p>Showing all barangays</p>
+    @else
+        <p>
+            @if ($municipality !== 'all') Showing barangays in municipality: {{ $municipality }} @endif
+            @if ($municipality !== 'all' && $captain !== 'all') | @endif
+            @if ($captain !== 'all') Showing barangay captain: {{ $captain }} @endif
+        </p>
+    @endif
+
+    <p>
+        <a href="{{ route('barangay.index') }}">All</a> |
+        <a href="{{ route('barangay.index', ['municipality' => 'Virac', 'captain' => $captain]) }}">Virac</a> |
+        <a href="{{ route('barangay.index', ['municipality' => 'Bato', 'captain' => $captain]) }}">Bato</a>
+    </p>
+
+    <p>
+        <a href="{{ route('barangay.index', ['municipality' => $municipality, 'captain' => 'Justine Andrei Tacorda']) }}">Justine Andrei Tacorda</a> |
+        <a href="{{ route('barangay.index', ['municipality' => $municipality, 'captain' => 'Lenard Gil Llorca']) }}">Lenard Gil Llorca</a> |
+        <a href="{{ route('barangay.index', ['municipality' => $municipality, 'captain' => 'John Hermie Tatel']) }}">John Hermie Tatel</a> |
+        <a href="{{ route('barangay.index', ['municipality' => $municipality, 'captain' => 'Khaliq Aguilar']) }}">Khaliq Aguilar</a> |
+        <a href="{{ route('barangay.index', ['municipality' => $municipality, 'captain' => 'Mikko Bobier']) }}">Mikko Bobier</a> |
+        <a href="{{ route('barangay.index', ['municipality' => $municipality, 'captain' => 'Jun Amaro']) }}">Jun Amaro</a>
+    </p>
+
+    <p><a href="{{ route('barangay.index') }}" class="btn btn-secondary btn-sm">Clear All Filters</a></p>
 
     <table class="table table-striped table-bordered">
         <thead class="table-dark">
@@ -36,9 +63,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="6" class="text-center">
-                        No barangays have been added yet.
-                    </td>
+                    <td colspan="6" class="text-center">No barangays found.</td>
                 </tr>
             @endforelse
         </tbody>
