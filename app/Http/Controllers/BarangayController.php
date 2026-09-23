@@ -6,22 +6,40 @@ use Illuminate\Http\Request;
 
 class BarangayController extends Controller
 {
-    private function barangays()
-    {
-        return [
-            1 => ['id' => 1, 'name' => 'Palnab del Norte', 'municipality' => 'Virac', 'population' => '435', 'barangay_captain' => 'Justine Andrei Tacorda'],
-            2 => ['id' => 2, 'name' => 'Palnab del Sur', 'municipality' => 'Virac', 'population' => '543', 'barangay_captain' => 'Lenard Gil Llorca'],
-            3 => ['id' => 3, 'name' => 'Gogon Centro', 'municipality' => 'Virac', 'population' => '1202', 'barangay_captain' => 'John Hermie Tatel'],
-            4 => ['id' => 4, 'name' => 'Magnesia del Norte', 'municipality' => 'Virac', 'population' => '212', 'barangay_captain' => 'Khaliq Aguilar'],
-            5 => ['id' => 5, 'name' => 'Francia', 'municipality' => 'Virac', 'population' => '1123', 'barangay_captain' => 'Mikko Bobier'],
-            6 => ['id' => 6, 'name' => 'Cabugao', 'municipality' => 'Bato', 'population' => '982', 'barangay_captain' => 'Jun Amaro'],
-        ];
-    }
 
-    public function index()
+    public function index(Request $request)
     {
-        $barangays = $this->barangays();
-        return view('barangay.index', ['barangays' => $barangays]);
+        $municipality = $request->query('municipality', 'all');
+        $captain = $request->query('captain', 'all');
+
+        $all = $this->barangays();
+
+        if ($municipality === 'all') {
+            $barangays = $all;
+        } else {
+            $barangays = [];
+            foreach ($all as $id => $barangay) {
+                if (strtolower($barangay['municipality']) === strtolower($municipality)) {
+                    $barangays[$id] = $barangay;
+                }
+            }
+        }
+
+        if ($captain !== 'all') {
+            $filtered = [];
+            foreach ($barangays as $id => $barangay) {
+                if (strtolower($barangay['barangay_captain']) === strtolower($captain)) {
+                    $filtered[$id] = $barangay;
+                }
+            }
+            $barangays = $filtered;
+        }
+
+        return view('barangay.index', [
+            'barangays'    => $barangays,
+            'municipality' => $municipality,
+            'captain'      => $captain,
+        ]);
     }
 
     public function create()
@@ -66,24 +84,15 @@ class BarangayController extends Controller
         return view('barangay.featured', ['barangay' => $barangay]);
     }
 
-    public function filter($municipality = null)
+    private function barangays()
     {
-        $all = $this->barangays();
-
-        if ($municipality) {
-            $barangays = [];
-            foreach ($all as $barangay) {
-                if (strtolower($barangay['municipality']) === strtolower($municipality)) {
-                    $barangays[] = $barangay;
-                }
-            }
-        } else {
-            $barangays = $all;
-        }
-
-        return view('barangay.filter', [
-            'barangays' => $barangays,
-            'municipality' => $municipality,
-        ]);
+        return [
+            1 => ['id' => 1, 'name' => 'Palnab del Norte', 'municipality' => 'Virac', 'population' => '435', 'barangay_captain' => 'Justine Andrei Tacorda'],
+            2 => ['id' => 2, 'name' => 'Palnab del Sur', 'municipality' => 'Virac', 'population' => '543', 'barangay_captain' => 'Lenard Gil Llorca'],
+            3 => ['id' => 3, 'name' => 'Gogon Centro', 'municipality' => 'Virac', 'population' => '1202', 'barangay_captain' => 'John Hermie Tatel'],
+            4 => ['id' => 4, 'name' => 'Magnesia del Norte', 'municipality' => 'Virac', 'population' => '212', 'barangay_captain' => 'Khaliq Aguilar'],
+            5 => ['id' => 5, 'name' => 'Francia', 'municipality' => 'Virac', 'population' => '1123', 'barangay_captain' => 'Mikko Bobier'],
+            6 => ['id' => 6, 'name' => 'Cabugao', 'municipality' => 'Bato', 'population' => '982', 'barangay_captain' => 'Jun Amaro'],
+        ];
     }
 }
