@@ -3,9 +3,12 @@
 @section('title', 'All Barangays List')
 
 @section('content')
-    <h2>List of Barangays</h2>
+    <div class="d-flex justify-content-between align-items-center">
+        <h2>List of Barangays</h2>
+        <a href="{{ route('barangay.create') }}" class="btn btn-primary">+ Add New Barangay</a>
+    </div>
 
-    @if ($municipality === 'all' && $captain === 'all')
+    @if ($municipality === 'all' && $captain === 'all')     
         <p>Showing all barangays</p>
     @else
         <p>
