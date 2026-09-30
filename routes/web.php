@@ -17,10 +17,5 @@ Route::get('/barangay/filter/{municipality?}', function ($municipality = null) {
 ->name('barangay.filter');
 
 Route::resource('barangay', BarangayController::class)
-    ->only(['index', 'show']);
+    ->only(['index', 'show', 'create', 'store']);
 
-Route::get('/teachers/featured', [TeacherController::class, 'featured'])
-    ->name('teachers.featured');
-
-Route::resource('teachers', TeacherController::class)
-    ->only(['index', 'show']);
