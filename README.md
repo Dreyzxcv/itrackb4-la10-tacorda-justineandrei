@@ -1,17 +1,13 @@
-# Laboratory Activity 6
+# Laboratory Activity 7
 
-## Q1 — Why no new route was needed
+## Q1: Why POST instead of GET, and what happens on refresh?
 
-The router only looks at the path, not the query string. So whether I visit `/barangay`, `/barangay?municipality=Virac`, or `/barangay?municipality=Virac&captain=Justine Andrei Tacorda`, they all hit the same route. I just read the filter values inside the controller using `$request->query()`, so I never needed to add a new route.
+If the form used GET, the data would be included in the URL. So when the browser refreshes the page, it repeats the same request and saves the record again, which creates duplicates. POST is different because the data is sent in the body, not the URL. After saving, we redirect the user, so refreshing just reloads the redirect destination and nothing gets saved twice.
 
-## Q2 — What the URL would look like with route parameters
+## Q2: What stops the save when validation fails, without an if statement?
 
-If I used route parameters for both filters, the URL for "year 4 only, no course filter" would have to look something like `/barangay/all/4` — I would need to put a placeholder like `all` just to say I'm not filtering by municipality. You can't skip a route parameter, so you're forced to include something even when you don't need that filter. That's why I used query strings instead — I only include the ones I'm actually using.
+When `$request->validate()` finds that a rule failed, it automatically stops the method and throws an exception. Because of that, the code that saves the record never gets reached. Laravel then sends the user back to the form and includes the error messages so they know what to fix.
 
-## Q3 — Which one needed a change to the pattern
+## Q3: Why does the success message not appear on every page even though it lives in the layout?
 
-The detail page (D3) needed a change. I used `request()->is('barangay*')` with a wildcard so it stays marked even when I'm on `/barangay/1`. The filter case (D4) didn't need anything because the query string isn't part of the path — so `barangay*` already matches `/barangay?municipality=Virac` without me doing anything extra.
-
-## Q4 — Why I deleted filter() but kept store() and update()
-
-I deleted `filter()` because I already replaced it with a better version inside `index()`. Keeping it would mean I have two filter implementations in the same project, and one of them is dead. I kept `store()` and `update()` because those are still empty — they're not replaced, they're just not finished yet. They'll be filled in during the next weeks, so leaving them there makes sense.
+The message is stored in the session as flash data, which means Laravel automatically deletes it after it is read once. The layout checks for it on every page, but after it shows up once right after the redirect, it is already gone from the session. So on every other page, the check finds nothing and the message just does not appear.
