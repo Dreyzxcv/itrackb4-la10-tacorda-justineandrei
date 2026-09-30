@@ -44,12 +44,36 @@ class BarangayController extends Controller
 
     public function create()
     {
-        //
+        return view('barangay.create');
     }
 
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name'             => 'required|string|max:255',
+            'municipality' => 'required|in:Virac,San Andres,San Miguel,Viga,Bato,Caramoran,Gigmoto,Pandan,Panganiban,Baras,Bagamanoc',
+            'population'       => 'required|integer|min:0',
+            'barangay_captain' => 'required|string|max:255',
+        ]);
+
+        $barangays = $this->barangays();
+
+        $id = max(array_keys($barangays)) + 1;
+
+        $barangays[$id] = [
+            'id'               => $id,
+            'name'             => $validated['name'],
+            'municipality'     => $validated['municipality'],
+            'population'       => (int)$validated['population'],
+            'barangay_captain' => $validated['barangay_captain'],
+        ];
+
+        $this->saveBarangays($barangays);
+
+        return redirect()
+            ->route('barangay.index')
+            ->with('success', 'Barangay created successfully.');
+
     }
 
     public function show(string $id)
@@ -86,13 +110,13 @@ class BarangayController extends Controller
 
     private function barangays()
     {
-        return [
-            1 => ['id' => 1, 'name' => 'Palnab del Norte', 'municipality' => 'Virac', 'population' => '435', 'barangay_captain' => 'Justine Andrei Tacorda'],
-            2 => ['id' => 2, 'name' => 'Palnab del Sur', 'municipality' => 'Virac', 'population' => '543', 'barangay_captain' => 'Lenard Gil Llorca'],
-            3 => ['id' => 3, 'name' => 'Gogon Centro', 'municipality' => 'Virac', 'population' => '1202', 'barangay_captain' => 'John Hermie Tatel'],
-            4 => ['id' => 4, 'name' => 'Magnesia del Norte', 'municipality' => 'Virac', 'population' => '212', 'barangay_captain' => 'Khaliq Aguilar'],
-            5 => ['id' => 5, 'name' => 'Francia', 'municipality' => 'Virac', 'population' => '1123', 'barangay_captain' => 'Mikko Bobier'],
-            6 => ['id' => 6, 'name' => 'Cabugao', 'municipality' => 'Bato', 'population' => '982', 'barangay_captain' => 'Jun Amaro'],
-        ];
+        $path = storage_path('app/barangays.json');
+        return json_decode(file_get_contents($path), true);
+    }
+
+    private function saveBarangays(array$barangays)
+    {
+        $path = storage_path('app/barangays.json');
+        file_put_contents($path, json_encode($barangays, JSON_PRETTY_PRINT));
     }
 }
