@@ -10,6 +10,11 @@
         <p class="text-muted mb-3">Prepared by: Justine Andrei A. Tacorda</p>
 
         @include('partials._nav')
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif   
 
         @yield('content')
     </div>
