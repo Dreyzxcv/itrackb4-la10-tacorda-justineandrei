@@ -1,13 +1,13 @@
-# Laboratory Activity 7
+# Laboratory Activity 9: Your Own Table, Your Own Model
 
-## Q1: Why POST instead of GET, and what happens on refresh?
+## F1: Which column did you make nullable, and why that one and not another?
 
-If the form used GET, the data would be included in the URL. So when the browser refreshes the page, it repeats the same request and saves the record again, which creates duplicates. POST is different because the data is sent in the body, not the URL. After saving, we redirect the user, so refreshing just reloads the redirect destination and nothing gets saved twice.
+I made `landmark` nullable. Not every barangay in my system has a well-known landmark, for example Cavinitan has none in my seeder, so the column has to be allowed to stay empty. The other columns like name, municipality, population and barangay captain are required for every barangay, so they should never be empty.
 
-## Q2: What stops the save when validation fails, without an if statement?
+## F2: Which step failed first for you, and what did the error say?
 
-When `$request->validate()` finds that a rule failed, it automatically stops the method and throws an exception. Because of that, the code that saves the record never gets reached. Laravel then sends the user back to the form and includes the error messages so they know what to fix.
+The first failure was in Tinker, when I tried `App\Models\Barangay::create(['name' => 'Palnab del Norte'])` before adding `$fillable`. It threw a `MassAssignmentException` that said "Add [name] to fillable property to allow mass assignment on [App\Models\Barangay]". That told me Laravel blocks mass assignment by default, so I added all six columns (name, municipality, population, barangay_captain, is_coastal and landmark) to `$fillable` in my `Barangay` model, and the same line worked after that.
 
-## Q3: Why does the success message not appear on every page even though it lives in the layout?
+## F3: You changed no Blade file in Part D, yet your pages still work. Why not?
 
-The message is stored in the session as flash data, which means Laravel automatically deletes it after it is read once. The layout checks for it on every page, but after it shows up once right after the redirect, it is already gone from the session. So on every other page, the check finds nothing and the message just does not appear.
+My Blade files read the data like `$barangay['name']` and loop over `$barangays`, and my controller still passes variables with those same names. The only thing that changed is where the data comes from: `Barangay::all()` and `Barangay::findOrFail($id)` return Eloquent objects instead of plain arrays. Eloquent models allow array-style access, so `$barangay['name']` gives the same value as before and the views did not need to change.
