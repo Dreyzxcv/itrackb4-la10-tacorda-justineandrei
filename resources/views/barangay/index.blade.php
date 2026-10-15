@@ -8,31 +8,6 @@
         <a href="{{ route('barangay.create') }}" class="btn btn-primary">+ Add New Barangay</a>
     </div>
 
-    @if ($municipality === 'all' && $captain === 'all')     
-        <p>Showing all barangays</p>
-    @else
-        <p>
-            @if ($municipality !== 'all') Showing barangays in municipality: {{ $municipality }} @endif
-            @if ($municipality !== 'all' && $captain !== 'all') | @endif
-            @if ($captain !== 'all') Showing barangay captain: {{ $captain }} @endif
-        </p>
-    @endif
-
-    <p>
-        <a href="{{ route('barangay.index') }}">All</a> |
-        <a href="{{ route('barangay.index', ['municipality' => 'Virac', 'captain' => $captain]) }}">Virac</a> |
-        <a href="{{ route('barangay.index', ['municipality' => 'Bato', 'captain' => $captain]) }}">Bato</a>
-    </p>
-
-    <p>
-        <a href="{{ route('barangay.index', ['municipality' => $municipality, 'captain' => 'Justine Andrei Tacorda']) }}">Justine Andrei Tacorda</a> |
-        <a href="{{ route('barangay.index', ['municipality' => $municipality, 'captain' => 'Lenard Gil Llorca']) }}">Lenard Gil Llorca</a> |
-        <a href="{{ route('barangay.index', ['municipality' => $municipality, 'captain' => 'John Hermie Tatel']) }}">John Hermie Tatel</a> |
-        <a href="{{ route('barangay.index', ['municipality' => $municipality, 'captain' => 'Khaliq Aguilar']) }}">Khaliq Aguilar</a> |
-        <a href="{{ route('barangay.index', ['municipality' => $municipality, 'captain' => 'Mikko Bobier']) }}">Mikko Bobier</a> |
-        <a href="{{ route('barangay.index', ['municipality' => $municipality, 'captain' => 'Jun Amaro']) }}">Jun Amaro</a>
-    </p>
-
     <p><a href="{{ route('barangay.index') }}" class="btn btn-secondary btn-sm">Clear All Filters</a></p>
 
     <table class="table table-striped table-bordered">
@@ -43,6 +18,8 @@
                 <th>Municipality</th>
                 <th>Population</th>
                 <th>Barangay Captain</th>
+                <th>Is Coastal</th>
+                <th>Landmark</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -59,6 +36,8 @@
                         @endif
                     </td>
                     <td>{{ $barangay['barangay_captain'] }}</td>
+                    <td>{{ $barangay['is_coastal'] ? 'Yes' : 'No' }}</td>
+                    <td>{{ $barangay['landmark'] ?? 'N/A' }}</td>
                     <td>
                         <a href="{{ route('barangay.show', $barangay['id']) }}"
                            class="btn btn-primary btn-sm">View</a>
