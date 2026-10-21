@@ -1,13 +1,13 @@
-# Laboratory Activity 9: Your Own Table, Your Own Model
+# Laboratory Activity 10
 
-## F1: Which column did you make nullable, and why that one and not another?
+## G1: Which column did you turn into a table, and why that one and not another?
 
-I made `landmark` nullable. Not every barangay in my system has a well-known landmark, for example Cavinitan has none in my seeder, so the column has to be allowed to stay empty. The other columns like name, municipality, population and barangay captain are required for every barangay, so they should never be empty.
+I turned `municipality` into its own `municipalities` table. In my seeder, Virac repeats across Palnab del Norte, Palnab del Sur and Capilihan, so typing the name as a string every time risks typos like "Virac" vs "virak". The other columns (name, population, barangay_captain, landmark) are different for each barangay, so there is nothing to share, and `is_coastal` is only a yes/no flag.
 
-## F2: Which step failed first for you, and what did the error say?
+## G2: What number did screenshot 6 show, and why exactly that number?
 
-The first failure was in Tinker, when I tried `App\Models\Barangay::create(['name' => 'Palnab del Norte'])` before adding `$fillable`. It threw a `MassAssignmentException` that said "Add [name] to fillable property to allow mass assignment on [App\Models\Barangay]". That told me Laravel blocks mass assignment by default, so I added all six columns (name, municipality, population, barangay_captain, is_coastal and landmark) to `$fillable` in my `Barangay` model, and the same line worked after that.
+It showed `Queries: 3`. `Barangay::with('municipality')->get()` runs 1 query for the barangays and 1 query for all their municipalities at once, and `Municipality::all()` for the filter links in `BarangayController@index` is the third. Without `with('municipality')`, my 5 seeded barangays would each fire their own municipality query in the table loop, so it would be 7.
 
-## F3: You changed no Blade file in Part D, yet your pages still work. Why not?
+## G3: Your belongsTo method is named in the singular. What would break if you made it plural?
 
-My Blade files read the data like `$barangay['name']` and loop over `$barangays`, and my controller still passes variables with those same names. The only thing that changed is where the data comes from: `Barangay::all()` and `Barangay::findOrFail($id)` return Eloquent objects instead of plain arrays. Eloquent models allow array-style access, so `$barangay['name']` gives the same value as before and the views did not need to change.
+`Barangay::with('municipality')` in my controller and `$barangay->municipality->name` in `index.blade.php` both use the method name, so renaming it to `municipalities()` would throw a `RelationNotFoundException` on the index page. Plural is also wrong semantically, because each barangay belongs to exactly one municipality, and the plural name belongs on `Municipality::barangays()`, which is the `hasMany` side.
