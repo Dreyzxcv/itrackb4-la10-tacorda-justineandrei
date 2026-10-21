@@ -16,27 +16,28 @@
                         <div class="invalid-feedback d-block">{{ $message }}</div>
                     @enderror
                 </div>
-
+                
                 <div class="mb-3">
-                    <label for="municipality" class="form-label">Municipality</label>
-                    <select name="municipality" id="municipality" class="form-control">
+                    <label for="municipality_id" class="form-label">Municipality</label>
+
+                    <select class="form-select" id="municipality_id" name="municipality_id">
                         <option value="">Select Municipality</option>
-                        <option value="Virac" @selected(old('municipality') === 'Virac')>Virac</option>
-                        <option value="Bato" @selected(old('municipality') === 'Bato')>Bato</option>
-                        <option value="San Andres" @selected(old('municipality') === 'San Andres')>San Andres</option>
-                        <option value="Viga" @selected(old('municipality') === 'Viga')>Viga</option>
-                        <option value="Bagamanoc" @selected(old('municipality') === 'Bagamanoc')>Bagamanoc</option>
-                        <option value="Pandan" @selected(old('municipality') === 'Pandan')>Pandan</option>
-                        <option value="Caramoran" @selected(old('municipality') === 'Caramoran')>Caramoran</option>
-                        <option value="Baras" @selected(old('municipality') === 'Baras')>Baras</option>
-                        <option value="San Miguel" @selected(old('municipality') === 'San Miguel')>San Miguel</option>
-                        <option value="Panganiban" @selected(old('municipality') === 'Panganiban')>Panganiban</option>
-                        <option value="Gigmoto" @selected(old('municipality') === 'Gigmoto')>Gigmoto</option>
+
+                        @foreach ($municipalities as $municipality)
+                            <option
+                                value="{{ $municipality->id }}"
+                                @selected(old('municipality_id') == $municipality->id)
+                            >
+                                {{ $municipality->name }}
+                            </option>
+                        @endforeach
                     </select>
-                    @error('municipality')
+
+                    @error('municipality_id')
                         <div class="invalid-feedback d-block">{{ $message }}</div>
                     @enderror
                 </div>
+
 
                 <div class="mb-3">
                     <label for="population" class="form-label">Population</label>

@@ -8,7 +8,18 @@
         <a href="{{ route('barangay.create') }}" class="btn btn-primary">+ Add New Barangay</a>
     </div>
 
+    <nav>
+        <a href="{{ route('barangay.index') }}">All</a>
+        @foreach ($municipalities as $municipality)
+            <a href="{{ route('barangay.index', ['municipality_id' => $municipality->id]) }}">
+                {{ $municipality->name }}
+            </a>
+        @endforeach
+    </nav>
+
     <p><a href="{{ route('barangay.index') }}" class="btn btn-secondary btn-sm">Clear All Filters</a></p>
+
+    <p>Queries: {{ count(\Illuminate\Support\Facades\DB::getQueryLog()) }}</p>
 
     <table class="table table-striped table-bordered">
         <thead class="table-dark">
@@ -28,7 +39,7 @@
                 <tr @if ($barangay['population'] > 1000) class="table-warning" @endif>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $barangay['name'] }}</td>
-                    <td>{{ $barangay['municipality'] }}</td>
+                    <td>{{ $barangay->municipality->name }}</td>
                     <td>
                         {{ $barangay['population'] }}
                         @if ($barangay['population'] > 1000)
