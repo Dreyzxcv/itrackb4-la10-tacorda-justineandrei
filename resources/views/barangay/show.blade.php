@@ -18,7 +18,7 @@
                 </tr>
                 <tr>
                     <th>Municipality</th>
-                    <td>{{ $barangay['municipality'] }}</td>
+                    <td>{{ $barangay->municipality->name }}</td>
                 </tr>
                 <tr>
                     <th>Population</th>

@@ -39,7 +39,7 @@
                 <tr @if ($barangay['population'] > 1000) class="table-warning" @endif>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $barangay['name'] }}</td>
-                    <td>{{ $barangay->municipality->name }}</td>
+                    <td>{{ $barangay->municipality->name ?? 'N/A' }}</td>
                     <td>
                         {{ $barangay['population'] }}
                         @if ($barangay['population'] > 1000)
